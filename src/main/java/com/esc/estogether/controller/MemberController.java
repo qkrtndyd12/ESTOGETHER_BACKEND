@@ -16,7 +16,7 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 @AllArgsConstructor
 @RestController
-@RequestMapping(value = "/api/v1/app")
+@RequestMapping(value = "/api/v1/members")
 public class MemberController {
 
     private final MemberService memberService;
@@ -29,7 +29,7 @@ public class MemberController {
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
-    @GetMapping("/members/{memberId}")
+    @GetMapping("/{memberId}")
     public ResponseEntity<?> findMemberByMemberId(@PathVariable Integer memberId) {
         ResponseDTO responseDTO = new ResponseDTO();
         responseDTO.setResultCode("S0001");
@@ -39,7 +39,7 @@ public class MemberController {
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
-    @GetMapping("/members/groups")
+    @GetMapping("/groups")
     public ResponseEntity<?> findMemberOrderByGroup() {
         ResponseDTO responseDTO = new ResponseDTO();
         responseDTO.setResultCode("S0001");
@@ -47,29 +47,13 @@ public class MemberController {
         responseDTO.setRes(memberService.findMemberByGroupIdOrderByGroup(memberSearch));
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
-    @GetMapping("/members/groups/{groupId}")
+    @GetMapping("/groups/{groupId}")
     public ResponseEntity<?> findMemberByGroupIdOrderByGroup(@PathVariable Integer groupId) {
         ResponseDTO responseDTO = new ResponseDTO();
         responseDTO.setResultCode("S0001");
         MemberSearch memberSearch = new MemberSearch();
         memberSearch.setGroupId(groupId);
         responseDTO.setRes(memberService.findMemberByGroupIdOrderByGroup(memberSearch));
-        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
-    }
-
-    @PostMapping("/attendance")
-    public ResponseEntity<?> attendanceCheck(@RequestBody List<Member> memberList) {
-        ResponseDTO responseDTO = new ResponseDTO();
-        responseDTO.setResultCode("S0001");
-        responseDTO.setRes(memberService.attendanceCheck(memberList));
-        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
-    }
-
-    @DeleteMapping("/attendance")
-    public ResponseEntity<?> deleteAttendance(@RequestBody List<Member> memberList) {
-        ResponseDTO responseDTO = new ResponseDTO();
-        responseDTO.setResultCode("S0001");
-        responseDTO.setRes(memberService.deleteAttendance(memberList));
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 }

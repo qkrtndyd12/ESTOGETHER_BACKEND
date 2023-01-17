@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.esc.estogether.mapper.MemberMapper">
+<mapper namespace="com.esc.estogether.mapper.AttendanceMapper">
 
-    <select id="findAll" resultType="com.esc.estogether.model.vo.Member">
-        SELECT *
-        FROM Member
-    </select>
     <select id="findAttendance"
-            parameterType="com.esc.estogether.model.vo.Member"
+            parameterType="com.esc.estogether.model.parameter.AttendanceSearch"
             resultType="com.esc.estogether.model.vo.MemberAttendance">
-        SELECT m.id AS id, g.name AS groupName, m.name AS name, CASE WHEN a.week IS NOT NULL THEN TRUE WHEN a.week IS NULL THEN FALSE END AS attendance
+        SELECT m.id AS id, g.name AS groupName, m.name AS name, m.sex, CASE WHEN a.week IS NOT NULL THEN TRUE WHEN a.week IS NULL THEN FALSE END AS attendance
         FROM `Member` m
              LEFT JOIN `Position` p
                        ON m.id = p.memberId
@@ -20,7 +16,9 @@
              LEFT JOIN Attendance a
                        ON m.id = a.memberId AND a.week = WEEK(now())
         <where>
-            <if test="id != null">AND m.id = #{id}</if>
+            <if test="memberId != null">AND m.id = #{memberId}</if>
+            <if test="groupId != null">AND g.id = #{groupId}</if>
+            <if test="attendance != null and attendance">AND a.week IS NOT NULL</if>
         </where>
     </select>
     <insert id="attendanceCheck" parameterType="com.esc.estogether.model.vo.Member">
@@ -42,21 +40,5 @@
                 )
     </delete>
 
-    <select id="findMemberByGroupIdOrderByGroup"
-            parameterType="com.esc.estogether.model.parameter.MemberSearch"
-            resultType="com.esc.estogether.model.vo.MemberByGroup">
-        SELECT m.name AS name, m.id AS id, p.`type`, p.subType, g.name AS groupName, (SELECT name FROM `Member` m2 WHERE m2.id = g.readerId) AS readerName
-        FROM `Member` m
-                 LEFT JOIN `Position` p
-                           ON m.id = p.memberId
-                 INNER JOIN GroupMember gm
-                            ON m.id = gm.memberId
-                 INNER JOIN `Group` g
-                            ON gm.groupId = g.id AND g.endDate IS NULL
-        <where>
-            <if test="memberId != null">AND m.id = #{memberId}</if>
-            <if test="groupId != null">AND g.id = #{groupId}</if>
-        </where>
-    </select>
 
 </mapper>

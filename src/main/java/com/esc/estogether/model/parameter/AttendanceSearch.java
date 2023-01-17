@@ -3,16 +3,16 @@ package com.esc.estogether.model.parameter;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MemberSearch {
+public class AttendanceSearch {
     private Integer memberId;
     private Integer groupId;
+    private Boolean attendance;
 
-    public MemberSearch(Integer memberId) {
+    public AttendanceSearch(Integer memberId) {
         this.memberId = memberId;
     }
 }

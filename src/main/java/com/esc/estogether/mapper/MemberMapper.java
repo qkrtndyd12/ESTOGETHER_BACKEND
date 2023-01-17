@@ -16,7 +16,4 @@ public interface MemberMapper {
 
     List<Member> findAll();
     List<MemberByGroup> findMemberByGroupIdOrderByGroup(MemberSearch memberSearch);
-    MemberAttendance findAttendance(Member member);
-    int attendanceCheck(List<Member> memberList);
-    int deleteAttendance(List<Member> memberList);
 }

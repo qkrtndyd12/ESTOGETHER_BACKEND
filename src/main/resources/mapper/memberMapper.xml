@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.esc.estogether.mapper.MemberMapper">
+
+    <select id="findAll" resultType="com.esc.estogether.model.vo.Member">
+        SELECT *
+        FROM Member
+    </select>
+
+    <select id="findMemberByGroupIdOrderByGroup"
+            parameterType="com.esc.estogether.model.parameter.MemberSearch"
+            resultType="com.esc.estogether.model.vo.MemberByGroup">
+        SELECT m.name AS name, m.id AS id, p.`type`, p.subType, g.name AS groupName, (SELECT name FROM `Member` m2 WHERE m2.id = g.readerId) AS readerName
+        FROM `Member` m
+                 LEFT JOIN `Position` p
+                           ON m.id = p.memberId
+                 INNER JOIN GroupMember gm
+                            ON m.id = gm.memberId
+                 INNER JOIN `Group` g
+                            ON gm.groupId = g.id AND g.endDate IS NULL
+        <where>
+            <if test="memberId != null">AND m.id = #{memberId}</if>
+            <if test="groupId != null">AND g.id = #{groupId}</if>
+        </where>
+    </select>
+
+</mapper>

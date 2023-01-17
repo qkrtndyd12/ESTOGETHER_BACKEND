@@ -1,5 +1,6 @@
 package com.esc.estogether.config;
 
+import com.esc.estogether.model.type.SexEnum;
 import com.esc.estogether.model.type.SubTypeEnum;
 import com.esc.estogether.model.type.TypeEnum;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -42,6 +43,7 @@ public class MyBatisConfig {
         sqlSessionFactoryBean.setTypeHandlers(new TypeHandler[]{
                 new TypeEnum.TypeHandler()
                 , new SubTypeEnum.TypeHandler()
+                , new SexEnum.TypeHandler()
         });
         return sqlSessionFactoryBean.getObject();
     }
