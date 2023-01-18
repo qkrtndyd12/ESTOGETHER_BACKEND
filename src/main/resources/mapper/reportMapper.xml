@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.esc.estogether.mapper.ReportMapper">
+
+    <select id="findReport"
+            parameterType="com.esc.estogether.model.parameter.ReportSearch"
+            resultType="com.esc.estogether.model.vo.ReportByMember">
+        SELECT g.name AS groupName, m.name AS memberName, gr.year, gr.week, gr.weeklyMemo, gr.sermonMemo, gr.praiseMemo
+        FROM `Member` m
+        INNER JOIN GroupMember gm
+        ON m.id = gm.memberId
+        INNER JOIN `Group` g
+        ON gm.groupId = g.id
+        INNER JOIN GroupReport gr
+        ON gm.id = gr.groupMemberId
+        <where>
+            <if test="memberId != null">AND m.id = #{memberId}</if>
+            <if test="groupId != null">AND g.id = #{groupId}</if>
+            <if test="year == null">AND gr.year = YEAR(now())</if>
+            <if test="year != null and year != 0">AND gr.year = #{year}</if>
+            <if test="week == null">AND gr.week = WEEK(now())</if>
+            <if test="week != null and week != 0">AND gr.week = #{week}</if>
+        </where>
+    </select>
+    <insert id="createReport" parameterType="com.esc.estogether.model.vo.GroupReport">
+        INSERT INTO ESC_TOGETHER.GroupReport
+        (groupMemberId, year, week, weeklyMemo, sermonMemo, praiseMemo, favorite, createdAt, updatedAt)
+        VALUES
+        <foreach collection="list" item="report" separator=" , ">
+            (#{report.groupMemberId}, #{report.year}, #{report.week}, #{report.weeklyMemo}, #{report.sermonMemo}, #{report.praiseMemo}, #{report.favorite}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+        </foreach>
+    </insert>
+    <delete id="deleteReport" parameterType="int">
+        DELETE FROM GroupReport
+        WHERE
+            id = #{id}
+<!--            groupMemberId IN (-->
+<!--                <foreach collection="list" item="member" separator=" , ">-->
+<!--                    #{member.id}-->
+<!--                </foreach>-->
+<!--                )-->
+    </delete>
+
+
+</mapper>

@@ -1,10 +1,8 @@
-package com.esc.estogether.controller;
+package com.esc.estogether.api;
 
 import com.esc.estogether.dto.ResponseDTO;
-import com.esc.estogether.model.parameter.MemberSearch;
 import com.esc.estogether.model.vo.Member;
 import com.esc.estogether.service.AttendanceService;
-import com.esc.estogether.service.MemberService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

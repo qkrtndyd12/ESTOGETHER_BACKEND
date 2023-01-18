@@ -17,9 +17,10 @@ public enum SubTypeEnum implements CodeEnum {
     , BOOKKEEPER("04", "회계")
     , SUB_BOOKKEEPER("05", "부회계")
     , CELL_READER("10", "셀 리더")
-    , PRAISE_TEAM_READER("10", "찬양팀 리더")
+    , PRAISE_TEAM_READER("11", "찬양팀 리더")
     , PASTOR("99", "목사")
-    , DIRECTOR("98", "부장 집사");
+    , DIRECTOR("98", "부장 집사")
+    , PRAISE_TEAM("20", "찬양팀");
 
     private final String code;
     private final String description;
