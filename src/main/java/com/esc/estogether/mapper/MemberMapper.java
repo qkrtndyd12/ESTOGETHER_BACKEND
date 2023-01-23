@@ -9,11 +9,13 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Mapper
 @Repository
 public interface MemberMapper {
 
-    List<Member> findAll();
+    List<Member> findAll(MemberSearch memberSearch);
+    Optional<Member> findById(MemberSearch memberSearch);
     List<MemberByGroup> findMemberByGroupIdOrderByGroup(MemberSearch memberSearch);
 }

@@ -1,10 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.esc.estogether.mapper.MemberMapper">
+    <resultMap id="memberMap" type="com.esc.estogether.model.vo.Member">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="sex" column="sex"/>
+        <result property="dayOfBirth" column="dayOfBirth"/>
+        <result property="phoneNumber" column="phoneNumber"/>
+        <result property="address" column="address"/>
+        <result property="parents" column="parents"/>
+        <result property="baptism" column="baptism"/>
+        <result property="job" column="job"/>
+        <result property="grade" column="grade"/>
+        <association property="memberStatus">
+            <result property="army" column="army"/>
+            <result property="otherArea" column="otherArea"/>
+            <result property="longAbsence" column="longAbsence"/>
+        </association>
+        <association property="position">
+            <result property="type" column="type"/>
+            <result property="subType" column="subType"/>
+            <result property="startDate" column="startDate"/>
+            <result property="endDate" column="endDate"/>
+            <result property="memo" column="memo"/>
+        </association>
+    </resultMap>
 
-    <select id="findAll" resultType="com.esc.estogether.model.vo.Member">
+    <select id="findAll" resultMap="memberMap" parameterType="com.esc.estogether.model.parameter.MemberSearch">
         SELECT *
-        FROM Member
+        FROM Member m
+        INNER JOIN MemberStatus ms
+            ON m.id = ms.memberId
+        LEFT JOIN Position p
+            ON m.id = p.memberId AND p.endDate IS NULL
+        <where>
+            <if test="army != null">AND ms.army = #{army}</if>
+            <if test="otherArea != null">AND ms.otherArea = #{otherArea}</if>
+            <if test="longAbsence != null">AND ms.longAbsence = #{longAbsence}</if>
+        </where>
+    </select>
+
+    <select id="findById" resultMap="memberMap" parameterType="com.esc.estogether.model.parameter.MemberSearch">
+        SELECT *
+        FROM Member m
+        INNER JOIN MemberStatus ms
+            ON m.id = ms.memberId
+        LEFT JOIN Position p
+            ON m.id = p.memberId AND p.endDate IS NULL
+        <where>
+            <if test="memberId != null">AND m.id = #{memberId}</if>
+            <if test="army != null">AND ms.army = #{army}</if>
+            <if test="otherArea != null">AND ms.otherArea = #{otherArea}</if>
+            <if test="longAbsence != null">AND ms.longAbsence = #{longAbsence}</if>
+        </where>
     </select>
 
     <select id="findMemberByGroupIdOrderByGroup"
@@ -22,6 +70,7 @@
             <if test="memberId != null">AND m.id = #{memberId}</if>
             <if test="groupId != null">AND g.id = #{groupId}</if>
         </where>
+        ORDER BY gm.sortNo
     </select>
 
 </mapper>

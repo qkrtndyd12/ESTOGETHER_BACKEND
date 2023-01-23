@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.esc.estogether.mapper.LoginMapper">
+    
+    <resultMap id="userMap" type="com.esc.estogether.token.User">
+        <result property="id" column="id"/>
+        <result property="password" column="password"/>
+        <result property="refreshToken" column="refreshToken"/>
+        <result property="createdAt" column="createdAt"/>
+        <result property="lastLogin" column="lastLogin"/>
+        <association property="member">
+            <id property="id" column="memberId"/>
+            <result property="name" column="name"/>
+            <result property="sex" column="sex"/>
+            <result property="dayOfBirth" column="dayOfBirth"/>
+            <result property="phoneNumber" column="phoneNumber"/>
+            <result property="address" column="address"/>
+            <result property="parents" column="parents"/>
+            <result property="baptism" column="baptism"/>
+            <result property="job" column="job"/>
+            <result property="grade" column="grade"/>
+        </association>
+        <collection property="roles" ofType="string">
+            <result property="role" column="role"/>
+        </collection>
+    </resultMap>
+    
+    <select id="findByUserId" resultMap="userMap">
+        SELECT u.id, u.password, ur.role, u.refreshToken, u.createdAt, u.lastLogin,
+               m.id AS memberId, m.name, m.sex, m.dayOfBirth, m.phoneNumber, m.address, m.parents, m.baptism, m.job, m.grade
+        FROM User u
+        LEFT JOIN UserRole ur
+            ON u.id = ur.userId
+        INNER JOIN Member m
+            ON u.memberId = m.id
+        WHERE u.id = #{id}
+    </select>
+
+    <update id="updateUser">
+        UPDATE User
+        SET lastLogin = CURRENT_TIMESTAMP, refreshToken = #{refreshToken}
+        WHERE id = #{id};
+    </update>
+    <update id="refreshToken">
+        UPDATE User
+        SET refreshToken = #{refreshToken}
+        WHERE id = #{id};
+    </update>
+    <insert id="saveUser" parameterType="com.esc.estogether.token.User">
+--         SELECT *
+--         FROM User
+--         WHERE id = #{id}
+    </insert>
+
+</mapper>

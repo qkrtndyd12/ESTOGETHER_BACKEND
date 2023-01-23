@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.esc.estogether.mapper.GroupMapper">
+    <resultMap id="groupMap" type="com.esc.estogether.model.vo.Group">
+        <result property="id" column="groupId"/>
+        <result property="name" column="groupName"/>
+        <result property="readerName" column="readerName"/>
+        <collection resultMap="com.esc.estogether.mapper.MemberMapper.memberMap" property="memberList"/>
+    </resultMap>
+
+    <select id="findGroup"
+            parameterType="com.esc.estogether.model.parameter.GroupSearch"
+            resultMap="groupMap">
+        SELECT g.id AS groupId, g.name AS groupName, (SELECT name FROM `Member` WHERE id = g.readerId) AS readerName,
+               m.*, ms.*, p.*
+        FROM `Group` g
+        INNER JOIN GroupMember gm
+            ON gm.groupId = g.id
+        INNER JOIN `Member` m
+            ON m.id = gm.memberId
+        INNER JOIN MemberStatus ms
+            ON m.id = ms.memberId
+        LEFT JOIN Position p
+            ON m.id = p.memberId AND p.endDate IS NULL
+        <where>
+            <if test="id != null">AND g.id = #{id}</if>
+            <if test="readerId != null">AND m.id = #{readerId}</if>
+            <if test="operation != null">
+                <choose>
+                    <when test="operation">AND g.endDate IS NULL</when>
+                    <otherwise>AND g.endDate IS NOT NULL</otherwise>
+                </choose>
+            </if>
+        </where>
+        ORDER BY CASE WHEN g.endDate IS NULL THEN 1 WHEN g.endDate IS NOT NULL THEN 2 END, g.sortNo, gm.sortNo
+    </select>
+
+
+</mapper>

@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    jdbc-url: jdbc:log4jdbc:mysql://localhost:3306/ESC_TOGETHER?&serverTimezone=UTC&autoReconnect=true&allowMultiQueries=true&characterEncoding=UTF-8
+    username: dfort123
+    password: 2914na
+    mapper-locations: classpath:/mapper/**/*.xml
+  output:
+    ansi:
+      enabled: always
+logging:
+  level:
+    jdbc:
+      sqlonly: OFF
+      sqltiming: OFF
+      resultsettable: INFO
+      audit: OFF
+      resultset: OFF
+      connection: OFF
+jwt:
+#  secret: VlwEyVBsYt9V7zq57TejMnVUyzblYcfPQye08f7MGVA9XkHa
+  secret: d25f51ed9877eaabd1ed93cb9fff8cd4ff69a40793f539245f9c042d0b1c440eb4570e98ae5688e1115fbdb97f7fc280286b00a2416024e045ab8ad5c750130c
+  accessToken:
+    validTime: 180000
+  refreshToken:
+    validTime: 86400000
