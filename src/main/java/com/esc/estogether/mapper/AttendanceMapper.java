@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface AttendanceMapper {
 
-    List<Group> findAttendance(AttendanceSearch attendanceSearch);
+    List<Group> findGroupAttendance(AttendanceSearch attendanceSearch);
     int attendanceCheckByMemberId(AttendanceSearch attendanceSearch);
     int deleteAttendanceByMemberId(AttendanceSearch attendanceSearch);
     int attendanceCheck(List<Member> memberList);

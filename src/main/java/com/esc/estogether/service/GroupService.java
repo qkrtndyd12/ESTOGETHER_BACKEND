@@ -28,7 +28,7 @@ public class GroupService {
     }
 
     public Group findGroupById(GroupSearch groupSearch) {
-        return groupMapper.findGroup(groupSearch).get(0);
+        return Optional.of(groupMapper.findGroup(groupSearch).get(0)).orElseThrow(() -> new ApiException(ExceptionEnum.INTERNAL_SERVER_ERROR));
     }
     public List<Group> findGroupByReaderId(GroupSearch groupSearch) {
         return groupMapper.findGroup(groupSearch);

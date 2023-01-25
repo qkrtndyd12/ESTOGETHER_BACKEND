@@ -1,5 +1,7 @@
 package com.esc.estogether.service;
 
+import com.esc.estogether.exception.ApiException;
+import com.esc.estogether.exception.ExceptionEnum;
 import com.esc.estogether.mapper.AttendanceMapper;
 import com.esc.estogether.model.parameter.AttendanceSearch;
 import com.esc.estogether.model.type.SexEnum;
@@ -23,8 +25,12 @@ public class AttendanceService {
 
     private final AttendanceMapper attendanceMapper;
 
-    public List<Group> findMemberAttendanceList(AttendanceSearch attendanceSearch) {
-        return attendanceMapper.findAttendance(attendanceSearch);
+    public List<Group> findGroupAttendanceList(AttendanceSearch attendanceSearch) {
+        return Optional.of(attendanceMapper.findGroupAttendance(attendanceSearch)).orElseThrow(() -> new ApiException(ExceptionEnum.INTERNAL_SERVER_ERROR));
+    }
+
+    public Group findGroupAttendanceByGroupId(AttendanceSearch attendanceSearch) {
+        return Optional.of(attendanceMapper.findGroupAttendance(attendanceSearch).get(0)).orElseThrow(() -> new ApiException(ExceptionEnum.INTERNAL_SERVER_ERROR));
     }
 
     public String attendancePrint(Integer memberId, Integer groupId, Boolean attendance) {

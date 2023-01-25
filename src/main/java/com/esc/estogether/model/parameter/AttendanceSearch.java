@@ -11,8 +11,5 @@ public class AttendanceSearch {
     private Integer memberId;
     private Integer groupId;
     private Boolean attendance;
-
-    public AttendanceSearch(Integer memberId) {
-        this.memberId = memberId;
-    }
+    private Boolean operation;
 }

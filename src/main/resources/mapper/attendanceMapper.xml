@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.esc.estogether.mapper.AttendanceMapper">
 
-    <select id="findAttendance"
+    <select id="findGroupAttendance"
             parameterType="com.esc.estogether.model.parameter.AttendanceSearch"
             resultMap="com.esc.estogether.mapper.GroupMapper.groupMap">
         SELECT g.id AS groupId, g.name AS groupName, (SELECT name FROM `Member` WHERE id = g.readerId) AS readerName,
@@ -22,6 +22,12 @@
             <if test="memberId != null">AND m.id = #{memberId}</if>
             <if test="groupId != null">AND g.id = #{groupId}</if>
             <if test="attendance != null and attendance">AND a.week IS NOT NULL</if>
+            <if test="operation != null">
+                <choose>
+                    <when test="operation">AND g.endDate IS NULL</when>
+                    <otherwise>AND g.endDate IS NOT NULL</otherwise>
+                </choose>
+            </if>
         </where>
     </select>
 

@@ -20,12 +20,13 @@ public class AttendanceController {
 
     @GetMapping("/groups")
     public ResponseEntity<?> findGroupAttendanceList(AttendanceSearch attendanceSearch) {
-        return ResponseEntity.ok(attendanceService.findMemberAttendanceList(attendanceSearch));
+        return ResponseEntity.ok(attendanceService.findGroupAttendanceList(attendanceSearch));
     }
     @GetMapping("/groups/{groupId}")
     public ResponseEntity<?> findGroupAttendanceListByGroupId(@PathVariable int groupId,
                                                       AttendanceSearch attendanceSearch) {
-        return ResponseEntity.ok(attendanceService.findMemberAttendanceList(attendanceSearch));
+        attendanceSearch.setGroupId(groupId);
+        return ResponseEntity.ok(attendanceService.findGroupAttendanceByGroupId(attendanceSearch));
     }
 //    @GetMapping("/findAll")
 //    public ResponseEntity<?> findAllMemberAttendanceList(AttendanceSearch attendanceSearch) {
