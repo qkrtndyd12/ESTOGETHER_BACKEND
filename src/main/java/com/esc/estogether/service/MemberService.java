@@ -4,15 +4,12 @@ import com.esc.estogether.exception.ApiException;
 import com.esc.estogether.exception.ExceptionEnum;
 import com.esc.estogether.mapper.MemberMapper;
 import com.esc.estogether.model.vo.Member;
-import com.esc.estogether.model.vo.MemberAttendance;
 import com.esc.estogether.model.vo.MemberByGroup;
 import com.esc.estogether.model.parameter.MemberSearch;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 

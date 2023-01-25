@@ -28,12 +28,12 @@ public class MemberController {
         return ResponseEntity.ok().body(memberService.findById(memberSearch));
     }
 
-    @GetMapping("/groups")
-    public ResponseEntity<?> findMemberOrderByGroup() {
-        return ResponseEntity.ok().body(memberService.findMemberByGroupIdOrderByGroup(new MemberSearch()));
-    }
-    @GetMapping("/groups/{groupId}")
-    public ResponseEntity<?> findMemberByGroupIdOrderByGroup(@PathVariable Integer groupId) {
-        return ResponseEntity.ok().body(memberService.findMemberByGroupIdOrderByGroup(new MemberSearch(null, groupId)));
-    }
+//    @GetMapping("/groups")
+//    public ResponseEntity<?> findMemberOrderByGroup() {
+//        return ResponseEntity.ok().body(memberService.findMemberByGroupIdOrderByGroup(new MemberSearch()));
+//    }
+//    @GetMapping("/groups/{groupId}")
+//    public ResponseEntity<?> findMemberByGroupIdOrderByGroup(@PathVariable Integer groupId) {
+//        return ResponseEntity.ok().body(memberService.findMemberByGroupIdOrderByGroup(new MemberSearch(null, groupId)));
+//    }
 }

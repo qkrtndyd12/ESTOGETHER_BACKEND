@@ -4,23 +4,40 @@
 
     <select id="findAttendance"
             parameterType="com.esc.estogether.model.parameter.AttendanceSearch"
-            resultType="com.esc.estogether.model.vo.MemberAttendance">
-        SELECT m.id AS id, g.name AS groupName, m.name AS name, m.sex, CASE WHEN a.week IS NOT NULL THEN TRUE WHEN a.week IS NULL THEN FALSE END AS attendance
-        FROM `Member` m
-             LEFT JOIN `Position` p
-                       ON m.id = p.memberId
-             INNER JOIN GroupMember gm
-                        ON m.id = gm.memberId
-             INNER JOIN `Group` g
-                        ON gm.groupId = g.id AND g.endDate IS NULL
-             LEFT JOIN Attendance a
-                       ON m.id = a.memberId AND a.week = WEEK(now())
+            resultMap="com.esc.estogether.mapper.GroupMapper.groupMap">
+        SELECT g.id AS groupId, g.name AS groupName, (SELECT name FROM `Member` WHERE id = g.readerId) AS readerName,
+        m.*, ms.*, p.*, CASE WHEN a.week IS NOT NULL THEN TRUE WHEN a.week IS NULL THEN FALSE END AS attendance
+        FROM `Group` g
+        INNER JOIN GroupMember gm
+            ON gm.groupId = g.id
+        INNER JOIN `Member` m
+            ON m.id = gm.memberId
+        INNER JOIN MemberStatus ms
+            ON m.id = ms.memberId
+        LEFT JOIN Position p
+            ON m.id = p.memberId AND p.endDate IS NULL
+        LEFT JOIN Attendance a
+            ON m.id = a.memberId AND a.week = WEEK(now()) AND a.year = YEAR(now())
         <where>
             <if test="memberId != null">AND m.id = #{memberId}</if>
             <if test="groupId != null">AND g.id = #{groupId}</if>
             <if test="attendance != null and attendance">AND a.week IS NOT NULL</if>
         </where>
     </select>
+
+    <insert id="attendanceCheckByMemberId" parameterType="com.esc.estogether.model.parameter.AttendanceSearch">
+        INSERT INTO Attendance
+            (memberId, week, year)
+        VALUES
+            (#{memberId}, WEEK(now()), YEAR(now()))
+    </insert>
+    <delete id="deleteAttendanceByMemberId" parameterType="com.esc.estogether.model.parameter.AttendanceSearch">
+        DELETE FROM Attendance
+        WHERE
+            week = WEEK(now()) AND YEAR(now())
+        AND memberId = #{memberId}
+    </delete>
+
     <insert id="attendanceCheck" parameterType="com.esc.estogether.model.vo.Member">
         INSERT INTO Attendance
             (memberId, week)

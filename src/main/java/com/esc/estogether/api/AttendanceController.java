@@ -1,5 +1,6 @@
 package com.esc.estogether.api;
 
+import com.esc.estogether.model.parameter.AttendanceSearch;
 import com.esc.estogether.model.vo.Member;
 import com.esc.estogether.service.AttendanceService;
 import lombok.AllArgsConstructor;
@@ -17,27 +18,39 @@ import java.util.List;
 public class AttendanceController {
     private final AttendanceService attendanceService;
 
-    @GetMapping("/findAll")
-    public ResponseEntity<?> findAllMemberAttendanceList() {
-        return ResponseEntity.ok(attendanceService.findMemberAttendanceList(null, null, null));
+    @GetMapping("/groups")
+    public ResponseEntity<?> findGroupAttendanceList(AttendanceSearch attendanceSearch) {
+        return ResponseEntity.ok(attendanceService.findMemberAttendanceList(attendanceSearch));
     }
-    @GetMapping("/checked")
-    public ResponseEntity<?> findMemberAttendanceList() {
-        return ResponseEntity.ok(attendanceService.findMemberAttendanceList(null, null, true));
+    @GetMapping("/groups/{groupId}")
+    public ResponseEntity<?> findGroupAttendanceListByGroupId(@PathVariable int groupId,
+                                                      AttendanceSearch attendanceSearch) {
+        return ResponseEntity.ok(attendanceService.findMemberAttendanceList(attendanceSearch));
     }
+//    @GetMapping("/findAll")
+//    public ResponseEntity<?> findAllMemberAttendanceList(AttendanceSearch attendanceSearch) {
+//        return ResponseEntity.ok(attendanceService.findMemberAttendanceList(attendanceSearch));
+//    }
+//    @GetMapping("/checked")
+//    public ResponseEntity<?> findMemberAttendanceList(AttendanceSearch attendanceSearch) {
+//        return ResponseEntity.ok(attendanceService.findMemberAttendanceList(attendanceSearch));
+//    }
 
     @GetMapping("/checked/print")
     public ResponseEntity<?> attendancePrint() {
         return ResponseEntity.ok(attendanceService.attendancePrint(null, null, true));
     }
 
-    @GetMapping("/{groupId}")
-    public ResponseEntity<?> findMemberAttendanceList(@PathVariable int groupId) {
-        return ResponseEntity.ok(attendanceService.findMemberAttendanceList(null, groupId, null));
-    }
     @PostMapping("")
     public ResponseEntity<?> attendanceCheck(@RequestBody List<Member> memberList) {
         return ResponseEntity.ok(attendanceService.attendanceCheck(memberList));
+    }
+
+    @PostMapping("/members/{memberId}")
+    public ResponseEntity<?> attendanceCheckByMemberId(@PathVariable int memberId,
+                                                       @RequestBody AttendanceSearch attendanceSearch) {
+        attendanceSearch.setMemberId(memberId);
+        return ResponseEntity.ok(attendanceService.attendanceCheckByMemberId(attendanceSearch));
     }
 
     @DeleteMapping("")

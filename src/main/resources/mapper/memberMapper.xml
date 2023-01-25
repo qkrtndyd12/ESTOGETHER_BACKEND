@@ -12,6 +12,7 @@
         <result property="baptism" column="baptism"/>
         <result property="job" column="job"/>
         <result property="grade" column="grade"/>
+        <result property="attendance" column="attendance"/>
         <association property="memberStatus">
             <result property="army" column="army"/>
             <result property="otherArea" column="otherArea"/>

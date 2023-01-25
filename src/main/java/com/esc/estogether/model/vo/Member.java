@@ -20,7 +20,8 @@ public class Member {
     private String job;
     private String grade;
     private MemberStatus memberStatus;
-
     private Position position;
+
+    private Boolean attendance;
 
 }
