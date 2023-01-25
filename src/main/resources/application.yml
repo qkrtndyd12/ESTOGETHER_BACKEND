@@ -18,9 +18,8 @@ logging:
       resultset: OFF
       connection: OFF
 jwt:
-#  secret: VlwEyVBsYt9V7zq57TejMnVUyzblYcfPQye08f7MGVA9XkHa
   secret: d25f51ed9877eaabd1ed93cb9fff8cd4ff69a40793f539245f9c042d0b1c440eb4570e98ae5688e1115fbdb97f7fc280286b00a2416024e045ab8ad5c750130c
   accessToken:
     validTime: 180000
   refreshToken:
-    validTime: 86400000
+    validTime: 86400000등
